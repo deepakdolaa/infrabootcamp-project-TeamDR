@@ -1,3 +1,5 @@
+###Creating VPC
+
 resource "aws_vpc" "teamdr-vpc" {
   #name = "eks-kanban-vpc"
   cidr_block = "10.10.0.0/16"
@@ -6,6 +8,8 @@ resource "aws_vpc" "teamdr-vpc" {
     Name = "teamdr-vpc"
   }
 }
+
+###Creating Public Subnet 1
 
 resource "aws_subnet" "teamdr-public" {
   vpc_id     = aws_vpc.teamdr-vpc.id
@@ -17,6 +21,8 @@ resource "aws_subnet" "teamdr-public" {
   }
 }
 
+###Creating Public Subnet 2
+
 resource "aws_subnet" "teamdr-public2" {
   vpc_id     = aws_vpc.teamdr-vpc.id
   cidr_block = "10.10.3.0/24"
@@ -26,6 +32,8 @@ resource "aws_subnet" "teamdr-public2" {
     Name = "teamdr-public2"
   }
 }
+
+###Creating Private Subnet 1
 
 resource "aws_subnet" "teamdr-private" {
   vpc_id     = aws_vpc.teamdr-vpc.id
@@ -37,6 +45,8 @@ resource "aws_subnet" "teamdr-private" {
   }
 }
 
+###Creating Private Subnet 2
+
 resource "aws_subnet" "teamdr-private2" {
   vpc_id     = aws_vpc.teamdr-vpc.id
   cidr_block = "10.10.4.0/24"
@@ -46,6 +56,9 @@ resource "aws_subnet" "teamdr-private2" {
     Name = "teamdr-private2"
   }
 }
+
+###Creating Internet Gatway
+
 
 resource "aws_internet_gateway" "teamdr-igw" {
 
@@ -57,6 +70,9 @@ resource "aws_internet_gateway" "teamdr-igw" {
   
 }
 
+###Creating EIP for NAT gateway
+
+
 resource "aws_eip" "teamdr-eip-natgatway" {
   vpc = true
   depends_on = [aws_internet_gateway.teamdr-igw]
@@ -64,6 +80,8 @@ resource "aws_eip" "teamdr-eip-natgatway" {
     Name = "teamdr-eip-natgatway"
   }
 }
+
+###Creating NAT gateway in a Public Subnet
 
 resource "aws_nat_gateway" "teamdr-natgatway" {
   allocation_id = aws_eip.teamdr-eip-natgatway.id
