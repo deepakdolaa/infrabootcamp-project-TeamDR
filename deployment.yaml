@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kanban
+  labels: 
+    app: kanban-pod
+  #namespace: kanban-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: kanban-pod
+  template:
+    metadata:
+      labels:
+        app: kanban-pod
+    spec:
+      containers:
+        - name: kanban
+          #image: nginx:latest
+          image: deepakdolaa/kanban-teamdr.v1:2.0
+          ports:
+          - containerPort: 80
+          
