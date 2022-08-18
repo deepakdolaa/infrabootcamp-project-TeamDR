@@ -1,9 +1,11 @@
+###Providre is AWS, rigion is canada central.
+
 provider "aws" {
   region = "ca-central-1"
 
 }
 
-
+###creating an IAM role for EKS cluster
 resource "aws_iam_role" "eks-kanban-role-cluster" {
   name = "eks-kanban-role-cluster"
   path = "/"
@@ -24,6 +26,8 @@ resource "aws_iam_role" "eks-kanban-role-cluster" {
 EOF
 
 }
+
+###Attaching the IAM role policy to the EKS cluster IAM role
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
@@ -48,6 +52,8 @@ resource "aws_eks_cluster" "eks-kanban-cluster" {
   ]
 }
 
+###creating an IAM role for EKS cluster worker nodes
+
 resource "aws_iam_role" "eks-kanban-role-workernodes" {
   name = "eks-kanban-role-workernodes"
 
@@ -62,6 +68,8 @@ resource "aws_iam_role" "eks-kanban-role-workernodes" {
     Version = "2012-10-17"
   })
 }
+
+###Attaching the IAM role policy to the EKS cluster worker nodes IAM role
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
@@ -82,6 +90,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.eks-kanban-role-workernodes.id
 }
+
+
+###creating a node group
 
 resource "aws_eks_node_group" "eks-kanban-workernode-group" {
   cluster_name    = aws_eks_cluster.eks-kanban-cluster.id
