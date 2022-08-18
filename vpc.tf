@@ -92,6 +92,8 @@ resource "aws_nat_gateway" "teamdr-natgatway" {
   }
 }
 
+### Creating Public route table and attaching to the IG.
+
 resource "aws_route_table" "teamdr-public-rt" {
   vpc_id = aws_vpc.teamdr-vpc.id
 
@@ -105,11 +107,14 @@ resource "aws_route_table" "teamdr-public-rt" {
   }
 }
 
+
+### Associating the PRT to Public Subnet1
 resource "aws_route_table_association" "teamdr-pub-rt-asso" {
   subnet_id      = aws_subnet.teamdr-public.id
   route_table_id = aws_route_table.teamdr-public-rt.id
 }
 
+### Associating the PRT to Public Subnet2
 resource "aws_route_table_association" "teamdr-pub-rt-asso2" {
   subnet_id      = aws_subnet.teamdr-public2.id
   route_table_id = aws_route_table.teamdr-public-rt.id
